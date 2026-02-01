@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Planner - LaoWai Toolkit</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { text-align: center; margin-top: 0; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 16px; box-sizing: border-box;}
+        
+        .btn {
+            width: 100%; padding: 15px; background: #007aff; color: white; border: none; 
+            border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer;
+        }
+        .btn:active { background: #0056b3; }
+
+        #result-area { margin-top: 30px; display: none; }
+        .day-plan { border-left: 3px solid #007aff; padding-left: 15px; margin-bottom: 20px; }
+        .day-title { font-weight: bold; font-size: 18px; color: #007aff; }
+        .spot { margin-top: 10px; }
+        .spot-en { font-weight: bold; }
+        .spot-cn { color: #888; font-size: 14px; margin-top: 2px; }
+        
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #888; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📅 Mini Trip Planner</h1>
+    <p style="text-align:center; color:#666; font-size:14px;">Generate a quick survival itinerary with Chinese addresses.</p>
+
+    <div class="form-group">
+        <label>City</label>
+        <select id="city">
+            <option value="beijing">Beijing (History & Culture)</option>
+            <option value="shanghai">Shanghai (Modern & Cyber)</option>
+            <option value="xian">Xi'an (Warriors & Food)</option>
+            <option value="chengdu">Chengdu (Pandas & Spicy)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Duration</label>
+        <select id="days">
+            <option value="1">1 Day (Highlights)</option>
+            <option value="2">2 Days (Deep Dive)</option>
+        </select>
+    </div>
+
+    <button class="btn" onclick="generate()">Generate Plan</button>
+
+    <div id="result-area">
+        <hr>
+        <div id="itinerary"></div>
+    </div>
+
+    <a href="index.html" class="back-link">← Back to Toolkit</a>
+</div>
+
+<script>
+    const data = {
+        beijing: {
+            1: [
+                {en: "Morning: Forbidden City", cn: "故宫博物院 (请司机带我去故宫东华门)"},
+                {en: "Lunch: Peking Duck", cn: "四季民福烤鸭店"},
+                {en: "Afternoon: Temple of Heaven", cn: "天坛公园 (东门)"}
+            ],
+            2: [
+                {en: "Morning: Great Wall (Mutianyu)", cn: "慕田峪长城 (建议包车)"},
+                {en: "Evening: Sanlitun Bar Street", cn: "三里屯太古里"}
+            ]
+        },
+        shanghai: {
+            1: [
+                {en: "Morning: The Bund & Yu Garden", cn: "外滩 / 豫园"},
+                {en: "Lunch: Soup Dumplings (Xiaolongbao)", cn: "南翔馒头店"},
+                {en: "Evening: Shanghai Tower", cn: "上海中心大厦"}
+            ],
+            2: [
+                {en: "All Day: Disney or French Concession Walk", cn: "上海迪士尼 / 武康路 (法租界)"}
+            ]
+        },
+        xian: {
+             1: [
+                {en: "Morning: Terracotta Warriors", cn: "秦始皇兵马俑博物馆"},
+                {en: "Evening: Muslim Quarter", cn: "回民街 (钟鼓楼)"}
+            ],
+            2: [
+                {en: "Morning: City Wall Cycling", cn: "西安城墙 (南门)"},
+                {en: "Afternoon: Big Wild Goose Pagoda", cn: "大雁塔"}
+            ]
+        },
+        chengdu: {
+            1: [
+                {en: "Morning: Giant Panda Base", cn: "成都大熊猫繁育研究基地"},
+                {en: "Dinner: Hot Pot!", cn: "小龙坎火锅 / 蜀大侠火锅"}
+            ],
+            2: [
+                {en: "Afternoon: People's Park (Tea House)", cn: "人民公园 (鹤鸣茶社)"},
+                {en: "Evening: Jinli Ancient Street", cn: "锦里古街"}
+            ]
+        }
+    };
+
+    function generate() {
+        const city = document.getElementById('city').value;
+        const days = parseInt(document.getElementById('days').value);
+        const container = document.getElementById('itinerary');
+        const cityData = data[city];
+        
+        let html = "";
+        
+        for (let i = 1; i <= days; i++) {
+            if (cityData[i]) {
+                html += `<div class="day-plan"><div class="day-title">Day ${i}</div>`;
+                cityData[i].forEach(item => {
+                    html += `
+                        <div class="spot">
+                            <div class="spot-en">${item.en}</div>
+                            <div class="spot-cn">${item.cn}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+        }
+        
+        container.innerHTML = html;
+        document.getElementById('result-area').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
