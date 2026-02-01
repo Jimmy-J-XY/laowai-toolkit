@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy - LaoWai Toolkit</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; }
+        
+        .med-group { margin-bottom: 20px; }
+        .group-title { font-weight: bold; color: #666; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .card:active { background: #f9f9f9; transform: scale(0.99); }
+        
+        .en-name { font-size: 18px; font-weight: bold; color: #007aff; }
+        .cn-name { font-size: 20px; font-weight: bold; color: #333; }
+        .desc { font-size: 12px; color: #888; margin-top: 4px; }
+        
+        /* Overlay */
+        #overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 999; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
+        }
+        #big-cn { font-size: 12vw; font-weight: 900; color: #333; margin-bottom: 20px; }
+        #big-en { font-size: 5vw; color: #007aff; }
+        .close-btn { margin-top: 50px; padding: 15px 40px; background: #eee; border-radius: 30px; font-weight: bold; }
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #888; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💊 Pharmacy Helper</h1>
+    
+    <div class="med-group">
+        <div class="group-title">Pain & Fever (止痛/发烧)</div>
+        <div class="card" onclick="show('布洛芬', 'Ibuprofen / Advil')">
+            <div>
+                <div class="en-name">Ibuprofen (Advil)</div>
+                <div class="desc">For pain, inflammation</div>
+            </div>
+            <div class="cn-name">布洛芬</div>
+        </div>
+        <div class="card" onclick="show('对乙酰氨基酚', 'Paracetamol / Tylenol')">
+            <div>
+                <div class="en-name">Paracetamol (Tylenol)</div>
+                <div class="desc">For fever, mild pain</div>
+            </div>
+            <div class="cn-name">对乙酰氨基酚</div>
+        </div>
+    </div>
+
+    <div class="med-group">
+        <div class="group-title">Stomach (肠胃)</div>
+        <div class="card" onclick="show('蒙脱石散', 'Smecta / Diarrhea')">
+            <div>
+                <div class="en-name">Anti-Diarrhea</div>
+                <div class="desc">Smecta powder</div>
+            </div>
+            <div class="cn-name">蒙脱石散</div>
+        </div>
+        <div class="card" onclick="show('奥美拉唑', 'Omeprazole / Acid')">
+            <div>
+                <div class="en-name">Omeprazole</div>
+                <div class="desc">For acid reflux/heartburn</div>
+            </div>
+            <div class="cn-name">奥美拉唑</div>
+        </div>
+    </div>
+
+    <div class="med-group">
+        <div class="group-title">Allergy & Cold (过敏/感冒)</div>
+        <div class="card" onclick="show('氯雷他定', 'Loratadine / Claritin')">
+            <div>
+                <div class="en-name">Loratadine (Claritin)</div>
+                <div class="desc">For allergies</div>
+            </div>
+            <div class="cn-name">氯雷他定</div>
+        </div>
+        <div class="card" onclick="show('抗生素', 'Antibiotics')">
+            <div>
+                <div class="en-name">Antibiotics</div>
+                <div class="desc">Needs Prescription!</div>
+            </div>
+            <div class="cn-name">抗生素 (处方药)</div>
+        </div>
+    </div>
+    
+    <a href="index.html" class="back-link">← Back to Toolkit</a>
+</div>
+
+<div id="overlay" onclick="closeOverlay()">
+    <div style="font-size: 16px; color: #888; margin-bottom: 20px;">I would like to buy:</div>
+    <div id="big-cn">MEDICINE</div>
+    <div id="big-en">ENGLISH</div>
+    <div class="close-btn">Close</div>
+</div>
+
+<script>
+    function show(cn, en) {
+        document.getElementById('big-cn').innerText = cn;
+        document.getElementById('big-en').innerText = en;
+        document.getElementById('overlay').style.display = 'flex';
+        
+        // Speak
+        const u = new SpeechSynthesisUtterance("你好，我想买" + cn);
+        u.lang = 'zh-CN';
+        speechSynthesis.speak(u);
+    }
+    
+    function closeOverlay() {
+        document.getElementById('overlay').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
