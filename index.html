@@ -22,6 +22,26 @@
             font-size: 1.5rem;
             margin-bottom: 20px;
         }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-weight: bold;
+        }
 
         .container {
             width: 100%;
@@ -129,9 +149,19 @@
 </head>
 <body>
 
-    <h1>🚕 Show The Driver</h1>
+    <h1>🇨🇳 LaoWai Toolkit</h1>
+    
+    <div class="nav-grid">
+        <a href="index.html" class="nav-card" style="background: #e3f2fd; border: 2px solid #2196f3;">
+            🚕 Taxi Card
+        </a>
+        <a href="dietary.html" class="nav-card">
+            🥗 Dietary Card
+        </a>
+    </div>
 
     <div class="container">
+        <h3>🚕 Show The Driver</h3>
         <div class="input-group">
             <label>Destination (Chinese)</label>
             <input type="text" id="dest-cn" placeholder="e.g. 机场 (Airport)">
