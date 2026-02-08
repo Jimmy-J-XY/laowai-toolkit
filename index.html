@@ -50,6 +50,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
         .input-group {
@@ -166,19 +167,28 @@
         </a>
     </div>
 
-    <div class="nav-grid">
-        <a href="planner.html" class="nav-card" style="background: #f3e5f5; color: #7b1fa2; grid-column: span 2;">
-            📅 AI Trip Planner (MVP)
-        </a>
-    </div>
-
-    <div class="container" style="text-align: center; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
+    <div class="container" style="text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
         <h3 style="color: #666;">Need a Human Fixer?</h3>
         <p style="color: #888; font-size: 14px;">Hospital visits, Police registration, or Complex translation?</p>
         <a href="https://wa.me/8613810787135?text=Hi%20Jimmy,%20I%20need%20a%20local%20guide%20help." 
            style="display: block; background: #25D366; color: white; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px;">
            Hire Jimmy on WhatsApp
         </a>
+    </div>
+
+    <div class="container">
+        <h3>🏠 My Stay</h3>
+        <div id="my-hotel-section" style="margin-bottom: 20px;">
+            <div id="hotel-saved-card" style="display:none; background: #fff9c4; padding: 15px; border-radius: 8px; border: 2px dashed #fbc02d; margin-bottom: 10px;">
+                <span id="saved-hotel-name" style="font-weight: bold; font-size: 18px;"></span>
+                <button onclick="useSavedHotel()" style="background: #fbc02d; color: black; padding: 8px; font-size: 14px; margin-top: 10px; height: auto;">🚕 Take me back</button>
+                <button onclick="clearHotel()" style="background: none; color: #666; font-size: 12px; border: none; text-decoration: underline; width: auto; padding: 5px; height: auto;">Change</button>
+            </div>
+            <div id="hotel-input-group">
+                <input type="text" id="hotel-cn" placeholder="Enter Hotel Name in Chinese" style="margin-bottom: 10px;">
+                <button onclick="saveHotel()" style="background: #4caf50; font-size: 14px; padding: 10px; height: auto;">💾 Save My Hotel</button>
+            </div>
+        </div>
     </div>
 
     <div class="container">
@@ -283,12 +293,43 @@
             });
         }
 
-        // Initialize
-        updatePresets();
-
         function setDest(cn) {
             document.getElementById('dest-cn').value = cn;
             showCard();
+        }
+
+        function saveHotel() {
+            const name = document.getElementById('hotel-cn').value;
+            if (!name) return;
+            localStorage.setItem('my_hotel', name);
+            renderHotel();
+        }
+
+        function renderHotel() {
+            const saved = localStorage.getItem('my_hotel');
+            const card = document.getElementById('hotel-saved-card');
+            const inputGroup = document.getElementById('hotel-input-group');
+            if (saved) {
+                card.style.display = 'block';
+                inputGroup.style.display = 'none';
+                document.getElementById('saved-hotel-name').innerText = saved;
+            } else {
+                card.style.display = 'none';
+                inputGroup.style.display = 'block';
+            }
+        }
+
+        function useSavedHotel() {
+            const saved = localStorage.getItem('my_hotel');
+            if (saved) {
+                document.getElementById('dest-cn').value = saved;
+                showCard();
+            }
+        }
+
+        function clearHotel() {
+            localStorage.removeItem('my_hotel');
+            renderHotel();
         }
 
         function showCard() {
@@ -312,6 +353,10 @@
             utterance.lang = 'zh-CN';
             speechSynthesis.speak(utterance);
         }
+
+        // Initialize
+        updatePresets();
+        renderHotel();
     </script>
 
 </body>
