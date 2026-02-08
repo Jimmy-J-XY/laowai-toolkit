@@ -183,18 +183,28 @@
 
     <div class="container">
         <h3>🚕 Show The Driver</h3>
+        
         <div class="input-group">
-            <label>Destination (Chinese)</label>
+            <label>1. Select City</label>
+            <select id="city-select" onchange="updatePresets()" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+                <option value="General">General / Other</option>
+                <option value="Beijing">Beijing 北京</option>
+                <option value="Shanghai">Shanghai 上海</option>
+                <option value="Guangzhou">Guangzhou 广州</option>
+                <option value="Shenzhen">Shenzhen 深圳</option>
+                <option value="Hangzhou">Hangzhou 杭州</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>2. Destination (or select preset below)</label>
             <input type="text" id="dest-cn" placeholder="e.g. 机场 (Airport)">
         </div>
 
         <button onclick="showCard()">Show Card</button>
         
-        <div class="preset-list">
-            <button class="preset-btn" onclick="setDest('机场', 'Airport')">✈️ Airport</button>
-            <button class="preset-btn" onclick="setDest('火车站', 'Train Station')">🚄 Train Station</button>
-            <button class="preset-btn" onclick="setDest('酒店', 'Hotel')">🏨 Hotel</button>
-            <button class="preset-btn" onclick="setDest('最近的地铁站', 'Nearest Metro')">🚇 Metro</button>
+        <div id="preset-container" class="preset-list">
+            <!-- Presets will be injected here -->
         </div>
     </div>
 
@@ -205,7 +215,59 @@
     </div>
 
     <script>
-        function setDest(cn, en) {
+        const DESTINATIONS = {
+            General: [
+                { cn: '机场', en: '✈️ Airport', desc: 'Any Airport' },
+                { cn: '火车站', en: '🚄 Train Station', desc: 'Any Station' },
+                { cn: '酒店', en: '🏨 Hotel', desc: 'Hotel' },
+                { cn: '最近的地铁站', en: '🚇 Metro', desc: 'Metro' }
+            ],
+            Beijing: [
+                { cn: '首都机场', en: '✈️ Capital Airport', desc: 'PEK' },
+                { cn: '大兴机场', en: '✈️ Daxing Airport', desc: 'PKX' },
+                { cn: '北京南站', en: '🚄 Beijing South', desc: 'High-speed' },
+                { cn: '北京西站', en: '🚄 Beijing West', desc: 'Main Station' }
+            ],
+            Shanghai: [
+                { cn: '浦东机场', en: '✈️ Pudong Airport', desc: 'PVG' },
+                { cn: '虹桥机场', en: '✈️ Hongqiao Airport', desc: 'SHA' },
+                { cn: '虹桥火车站', en: '🚄 Hongqiao Railway', desc: 'High-speed' },
+                { cn: '上海火车站', en: '🚄 Shanghai Railway', desc: 'Main' }
+            ],
+            Guangzhou: [
+                { cn: '白云机场', en: '✈️ Baiyun Airport', desc: 'CAN' },
+                { cn: '广州南站', en: '🚄 Guangzhou South', desc: 'High-speed' },
+                { cn: '广州东站', en: '🚄 Guangzhou East', desc: 'Main' }
+            ],
+            Shenzhen: [
+                { cn: '宝安机场', en: '✈️ Baoan Airport', desc: 'SZX' },
+                { cn: '深圳北站', en: '🚄 Shenzhen North', desc: 'High-speed' },
+                { cn: '福田高铁站', en: '🚄 Futian Station', desc: 'City Center' }
+            ],
+            Hangzhou: [
+                { cn: '萧山机场', en: '✈️ Xiaoshan Airport', desc: 'HGH' },
+                { cn: '杭州东站', en: '🚄 Hangzhou East', desc: 'High-speed' }
+            ]
+        };
+
+        function updatePresets() {
+            const city = document.getElementById('city-select').value;
+            const container = document.getElementById('preset-container');
+            container.innerHTML = '';
+            
+            DESTINATIONS[city].forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'preset-btn';
+                btn.innerHTML = `<strong>${item.en}</strong><br><small>${item.desc}</small>`;
+                btn.onclick = () => setDest(item.cn);
+                container.appendChild(btn);
+            });
+        }
+
+        // Initialize
+        updatePresets();
+
+        function setDest(cn) {
             document.getElementById('dest-cn').value = cn;
             showCard();
         }
